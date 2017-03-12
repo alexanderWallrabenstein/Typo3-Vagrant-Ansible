@@ -134,12 +134,11 @@ _might be necessary after the provisioning_
     - open _typo3conf/LocalConfiguration.php_ with a texteditor
     - set _database_, _host_, _password_, _username_ in 'DB' according to `mysql['users']['typo3']` and `mysql['databases']['typo3_local']` in [config.yml](sync/config/config.yml)
 * adapt settings in Typoscript
-    - login to your Typo3 backend, open the Typoscript template for your root page and set
-        ```
-        config.baseURL = localhost
-        config.absRefPrefix = /
-        ```
-
+    - login to your Typo3 backend, open the 'Template' for your root page and edit the TypoScript 'Setup':
+    ```
+    config.baseURL = localhost
+    config.absRefPrefix = /
+    ```
 
 ## The sync/typo3 directory
 
