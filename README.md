@@ -5,7 +5,7 @@ This repository aims to create a reproducible Typo3 development environment usin
 You can either create a new, clean Typo3 installation or import an existing setup. This allows you to save time and trouble creating a working development environment. Since the setup (except data) is under version control, you can rebuild the entire environment reliably and without manual intervention!
 
 ## Installation
-_By default, a new and clean installation of Typo3 will be created. Here's how you can [import an existing Typo3 setup](https://github.com/alexanderWallrabenstein/Typo3-Vagrant-Ansible/new/master?readme=1#2-create-a-typo3-installation-but-import-data-from-an-existing-setup)_
+_By default, a new and clean installation of Typo3 will be created. Here's how you can [import an existing Typo3 setup](#2-create-a-typo3-installation-but-import-data-from-an-existing-setup)_
 
 ### Requirements
 * [VirtualBox](https://www.virtualbox.org/) - Version 5.* (free)
