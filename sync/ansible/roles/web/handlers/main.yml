@@ -1,0 +1,14 @@
+---
+# handlers
+
+- name: restart apache2
+  service:
+    name: apache2
+    state: restarted
+  become: yes
+
+- name: ensure apache2 running
+  service: 
+    name: apache2 
+    state: started
+  become: yes

@@ -1,0 +1,55 @@
+---
+# install mysql-server and configure users and databases
+
+- name: install mysql-server package
+  apt: 
+    name: "{{ item }}"
+    state: installed 
+    update_cache: yes
+  become: yes
+  with_items:
+    - mysql-server
+    - python-mysqldb
+
+- name: update mysql root password for all root accounts
+  become: yes
+  mysql_user: 
+    name: "{{ mysql['users']['root']['name'] }}" 
+    password: "{{ mysql['users']['root']['password'] }}"
+    check_implicit_admin: yes
+    login_user: "{{ mysql['users']['root']['name'] }}" 
+    login_password: "{{ mysql['users']['root']['password'] }}"
+    priv: "*.*:ALL,GRANT"
+    host: "{{ item }}" 
+  with_items:
+    - "{{ ansible_hostname }}"
+    - 127.0.0.1
+    - ::1
+    - localhost
+
+- name: create mysql database
+  mysql_db:
+    name: "{{ mysql['databases']['typo3_local']['name'] }}"
+    state: present
+    login_user: "{{ mysql['users']['root']['name'] }}" 
+    login_password: "{{ mysql['users']['root']['password'] }}"
+
+- name: create mysql user
+  mysql_user:
+    name: "{{ mysql['users']['typo3']['name'] }}"
+    password: "{{ mysql['users']['typo3']['password'] }}"
+    priv: "{{ mysql['databases']['typo3_local']['name'] }}.*:ALL"
+    state: present
+    login_user: "{{ mysql['users']['root']['name'] }}" 
+    login_password: "{{ mysql['users']['root']['password'] }}"
+
+- name: remove anonymous user from database
+  mysql_user: 
+    name: ''
+    host: "{{ item }}"
+    state: absent
+    login_user: "{{ mysql['users']['root']['name'] }}" 
+    login_password: "{{ mysql['users']['root']['password'] }}"
+  with_items:
+     - localhost
+     - "{{ ansible_hostname }}"

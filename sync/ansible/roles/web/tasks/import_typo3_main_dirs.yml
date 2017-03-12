@@ -1,0 +1,36 @@
+---
+# import required typo3 directories according to the specified method
+
+- name: symlink typo3 directories to DocumentRoot
+  file:
+    dest: "/var/www/site/htdocs/{{ item.name }}"
+    src: "{{ item.src }}"
+    owner: www-data
+    group: www-data
+    mode: 0777
+    state: link
+  become: yes
+  with_items: "{{ typo3['main_dirs'] }}"
+  when: "'{{item.method}}' == 'symlink'"
+
+- name: copy typo3 directories to DocumentRoot
+  copy:
+    dest: "/var/www/site/htdocs/{{ item.name }}/"
+    src: "{{ item.src }}"
+    owner: www-data
+    group: www-data
+    mode: 0777
+  become: yes
+  with_items: "{{ typo3['main_dirs'] }}"
+  when: "'{{item.method}}' == 'copy'"
+
+- name: create typo3 directories in DocumentRoot
+  file:
+    path: "/var/www/site/htdocs/{{ item.name }}"
+    state: directory
+    owner: www-data
+    group: www-data
+    mode: 0777
+  become: yes
+  with_items: "{{ typo3['main_dirs'] }}"
+  when: "'{{item.method}}' == 'create'"

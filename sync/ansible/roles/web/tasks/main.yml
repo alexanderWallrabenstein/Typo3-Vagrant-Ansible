@@ -1,0 +1,14 @@
+---
+# handle all webserver related tasks
+# install software, configure apache2 and handle typo3 resources
+
+- include: install_software_packages.yml
+- include: create_apache_vhost.yml
+- include: enable_apache_mods.yml
+- include: setup_typo3_core.yml
+
+- include: create_first_install.yml
+  when: "{{ general['clean_typo3_install'] }}"
+
+- include: import_typo3_main_dirs.yml
+  when: "not {{ general['clean_typo3_install'] }}"

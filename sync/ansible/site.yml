@@ -1,0 +1,24 @@
+---
+# master 'playbook'
+# deploy the whole application stack
+
+- name: configure and deploy the webservers and application code
+  hosts: webserver
+  roles:
+    - web
+  vars_files:
+    - /vagrant/config/config.yml
+
+- name: deploy mysql and configure the databases
+  hosts: dbserver
+  roles:
+    - db
+  vars_files:
+    - /vagrant/config/config.yml
+
+- name: apply common configuration to all nodes
+  hosts: all
+  roles:
+    - common
+  vars_files:
+    - /vagrant/config/config.yml

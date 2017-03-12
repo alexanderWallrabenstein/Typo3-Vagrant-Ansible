@@ -1,0 +1,9 @@
+---
+# enable apache mods
+
+- name: enable apache mod_rewrite
+  command: a2enmod rewrite
+  become: yes
+  notify:
+    - restart apache2
+    - ensure apache2 running

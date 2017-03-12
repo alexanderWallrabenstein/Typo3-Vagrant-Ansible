@@ -1,0 +1,33 @@
+---
+# handle typo3 resources
+
+- name: get typo3 source (if not present)
+  get_url:
+    url: https://get.typo3.org/{{ typo3['version'] }}
+    dest: /vagrant/typo3/typo3_src-{{ typo3['version'] }}
+    force: no
+    mode: 0744
+  
+- name: extract typo3 source archive
+  unarchive:
+    src: /vagrant/typo3/typo3_src-{{ typo3['version'] }}
+    dest: /var/www/site
+    copy: yes
+    owner: www-data 
+    group: www-data 
+    mode: 0777
+  become: yes
+
+- name: create symlinks for typo3 source in documentRoot
+  file: 
+    dest: "/var/www/site/htdocs/{{ item.linkname }}"
+    src: "{{ item.target }}"
+    state: link
+  with_items:
+    - { linkname: 'typo3_src', target: '/var/www/site/typo3_src-{{ typo3["version"] }}' }
+    - { linkname: 'index.php', target: 'typo3_src/index.php' }
+    - { linkname: 'typo3', target: 'typo3_src/typo3' }
+    - { linkname: '.htaccess', target: '/vagrant/config/.htaccess' }
+  notify:
+    - restart apache2
+    - ensure apache2 running

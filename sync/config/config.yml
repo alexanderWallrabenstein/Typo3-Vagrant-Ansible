@@ -1,0 +1,110 @@
+---
+# central config file
+
+vm:
+  box: ubuntu/trusty64
+  hostname: ansible-vm
+  box_check_update: true
+  box_version: ">=0"
+  post_up_message:
+      "\n
+      ======================================================================\n
+      \t\t\t\tWelcome!\n
+      ======================================================================\n\n
+      Important information\n
+      - start the box: 'vagrant up'\n
+      - access the box: 'vagrant ssh'\n
+      - destroy the box: 'vagrant destroy'\n
+      - reload the box (config.yml changes): 'vagrant reload --provisioning'\n
+      - provision the box (ansible changes): 'vagrant provision'\n
+      - show ssh access information: 'vagrant ssh-config'\n
+      - credentials\n
+      \t- user: vagrant, password: vagrant\n
+      \t- user: root, password: vagrant\n
+      - passwordless sudo: 'sudo <command>'\n\n
+      ----------------------------------------------------------------------\n"
+  provider:
+    cpus: 2
+    memory: 2048
+    name: typo3-vagrant-ansible
+    gui: false
+    # all available options for Virtualbox: https://www.virtualbox.org/manual/ch08.html
+    customize:
+      - name: set description
+        command: modifyvm
+        option: --description
+        value: ansible-vm with Typo3 Setup
+      - name: set cpuexecutioncap
+        command: modifyvm
+        option: --cpuexecutioncap
+        value: 50
+  network:
+    private_network:
+      # allowed values: "<ip address>" or "dhcp"
+      ip: "192.168.50.50"
+    forwarded_port:
+      - name: http
+        host: 8080
+        guest: 80
+        auto_correct: true
+  # required: id, source, target
+  # optional: mount_options, disabled
+  synced_folder:
+    - id: vagrant_default
+      source: .
+      target: /vagrant
+      disabled: true
+    - id: vagrant_ansible
+      source: ./sync/ansible
+      target: /vagrant/ansible
+      mount_options: ["dmode=775","fmode=664"]
+    - id: vagrant_config
+      source: ./sync/config
+      target: /vagrant/config
+    - id: vagrant_typo3
+      source: ./sync/typo3
+      target: /vagrant/typo3
+
+ansible:
+  install: true
+  config_file: /vagrant/config/ansible.cfg
+  # When version is defined (e.g. "1.8.2"), the Ansible local provisioner will be executed only if Ansible is installed at the requested version.
+  version: latest 
+  limit: all
+  playbook: /vagrant/ansible/site.yml
+  tmp_path: /tmp/vagrant-ansible 
+
+general:
+  clean_typo3_install: true
+
+mysql:
+  users:
+    root:
+      name: root
+      password: pwd
+    typo3:
+      name: typo3
+      password: topsecret
+  databases:
+    typo3_local:
+      name: typo3_local
+  # ignored if general['clean_typo3_install']=true
+  sql_dump_path: /vagrant/typo3/typo3_db.sql
+
+typo3:
+  version: "6.2.14"
+  # ignored if general['clean_typo3_install']=true
+  # allowed values for 'method': symlink, copy, create
+  # 'symlink' and 'copy' require the 'src' attribute additionally
+  main_dirs: 
+    - name: fileadmin
+      method: symlink
+      src: /vagrant/typo3/fileadmin
+    - name: typo3conf
+      method: symlink
+      src: /vagrant/typo3/typo3conf
+    - name: uploads
+      method: symlink
+      src: /vagrant/typo3/uploads
+    - name: typo3temp
+      method: create

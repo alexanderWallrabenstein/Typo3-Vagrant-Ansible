@@ -1,0 +1,10 @@
+---
+# import the provided sql dump into the database
+
+- name: import sql dump
+  mysql_db:
+    state: import
+    name: "{{ mysql['databases']['typo3_local']['name'] }}"
+    target: "{{ mysql['sql_dump_path'] }}"
+    login_user: "{{ mysql['users']['typo3']['name'] }}"
+    login_password: "{{ mysql['users']['typo3']['password'] }}"

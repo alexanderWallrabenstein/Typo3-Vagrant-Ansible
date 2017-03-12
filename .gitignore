@@ -1,0 +1,6 @@
+*.sublime-project
+*.sublime-workspace
+sync/typo3/*
+!sync/typo3/placeholder.md
+sync/ansible/*.retry
+.vagrant

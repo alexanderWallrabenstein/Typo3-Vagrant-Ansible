@@ -1,0 +1,30 @@
+---
+# apply common tasks to all hosts
+
+- name: install utility software
+  apt:
+    name: "{{ item }}"
+    state: latest
+    update-cache: yes
+  become: yes
+  with_items:
+    - tree
+
+- name: allow vagrant user to read log files
+  file:
+    path: "/var/log/{{ item }}"
+    mode: 0744
+  become: yes
+  with_items:
+    - syslog
+
+- name: allow vagrant user to read log files in directories
+  file:
+    path: "/var/log/{{ item }}"
+    mode: 0755
+    state: directory
+    recurse: yes
+  become: yes
+  with_items:
+    - apache2
+    - mysql

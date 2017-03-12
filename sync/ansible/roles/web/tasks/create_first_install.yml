@@ -1,0 +1,7 @@
+---
+# create FIRST_INSTALL file
+
+- name: "create first install"
+  file:
+    path: /var/www/site/htdocs/FIRST_INSTALL
+    state: touch

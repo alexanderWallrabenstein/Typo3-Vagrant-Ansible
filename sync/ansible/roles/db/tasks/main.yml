@@ -1,0 +1,8 @@
+---
+# handle all database related tasks 
+# install mysql and configure user and databases
+
+- include: setup_db.yml
+
+- include: import_sql_dump.yml
+  when: "not {{ general['clean_typo3_install'] }}"

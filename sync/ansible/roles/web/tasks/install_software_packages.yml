@@ -1,0 +1,16 @@
+---
+# install required software packages
+
+- name: install software packages
+  apt: 
+    name: "{{ item }}"
+    state: latest
+    update_cache: yes
+  become: yes
+  with_items:
+    - apache2
+    - php5
+    - git
+    - imagemagick
+    - php5-gd
+    - php5-mysql
