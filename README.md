@@ -10,6 +10,7 @@ _By default, a new and clean installation of Typo3 will be created. Here's how y
 ### Requirements
 * [VirtualBox](https://www.virtualbox.org/) - Version 5.* (free)
 * [Vagrant](http://www.vagrantup.com/) - Version 1.9.* (free)
+* SSH capable terminal (on Windows e.g. Git Bash or Cygwin)
 
 ### Using git
 * open a terminal
